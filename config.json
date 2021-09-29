@@ -1,1 +1,11 @@
-{"timeout": 3, "assignment": 100, "student_tests": ["test_student.py"], "modifiable_files": ["a02.py"], "total_points": 14, "email": "aw97671@gmail.com", "submission_pass": "70pfpmn7lmm3"}
+{
+    "student_tests": [
+        "test_student.py"
+    ],
+    "modifiable_files": [
+        "a06.py"
+    ],
+    "timeout": 10,
+    "assignment": 95,
+    "total_points": 10
+}
