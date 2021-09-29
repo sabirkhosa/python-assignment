@@ -9,28 +9,36 @@ def split_safe(line):
         return ist1
     ist1=['']
     index=0
-    bool=False
+    bol=False
     blank=False
     for i in line:
-        if i =="," and bool ==False:
+        if i =="," and bol==False:
             ist1.append('')
-            index=index +1
+            index=index+1
             blank=True
-        elif i=="'" and bool ==False:
-            bool=True
-        elif i=="" and bool==True:
-            bool=False
-        elif i =="" and blank==False:
-            ist1[index] =ist1[index]+i
+        elif i=="'" and bol==False:
+            bol=True
+        elif i=="'" and bol==True:
+            bol=False 
+        elif i=="" and blank==False:
+            ist1[index]=ist1[index]+i
         elif i !='':
             ist1[index] = ist1[index]+i
             blank=False
-return ist1
-#### End OF MARKER
-
+    ist1 = list
 
 
 ### YOUR CODE FOR read_data() FUNCTION GOES HERE ###
+def  read_data(k,l):
+	r=[]
+	import os
+	filename=os.path.join(k,l)
+	with open(filename , "r") as i:
+		for line in i:
+			e=split_safe(line)
+			r.append(e)
+		return(r)
+	
 
 #### End OF MARKER
 
