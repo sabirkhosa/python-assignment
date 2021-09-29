@@ -1,0 +1,11 @@
+0. Zero,Sifar
+1. One,Aik
+2. Two,Dow
+3. Three,Teen
+4. Four,Chaar
+5. Five,Paanch
+6. Six,Chay
+7. Seven,Saat
+8. Eight,Aath
+9. Nine,Nau
+10. Ten,Das
