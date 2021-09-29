@@ -1,105 +1,64 @@
 try:
-    from a06 import get_student_marks
+    from a05 import is_prime, get_largest_prime, output_factors
 except ImportError:
-    print("Bad import of get_student_marks")
-
-try:
-    from a06 import get_grade
-except ImportError:
-    print("Bad import of get_grade")
+    pass
 
 
 
-epsilon = 1e-4
+def test_isprime_1():
+    for i in [5, 139, 631, 919]:
+        assert is_prime(i) == True
 
-def test_marks_s1():
-    # grade_boundaries = {'A': 80, 'B': 70, 'C': 60, 'D': 50}
-    student_data = [ 
-        {'roll_no': 'p18-1001', 'marks': {
-                'english': (1.4, 2.5, 15, 9.6, 33), 
-                'calculus': (2.4, 1.5, 12, 1.6, 21),
-            }, 'attendance': 88.4
-        }, 
-        {'roll_no': 'p18-1002', 'marks': {
-                'english': (2.4, 1.5, 12, 1.6, 21),
-                'programming fundaments': (2.4, 1.5, 12, 1.6, 21),
-            }, 'attendance': 79.4
-        }, 
-        {'roll_no': 'p18-1003', 'marks': {
-                'calculus': (2.4, 1.5, 12, None, 21), 
-                'programming fundamentals': (2.4, 1.5, 12, 1.6, 21), 
-            }, 'attendance': 79.4
-        }, 
-    ]
+def test_isprime_float():
+    assert is_prime(6.0) == False
+
+def test_isprime_float_2():
+    assert is_prime(6.09) == False
 
 
-    student_marks = get_student_marks(student_data)
-    assert abs(student_marks['p18-1001']['english'] - 61.5) < epsilon
-    assert abs(student_marks['p18-1001']['calculus'] - 38.5) < epsilon
+## get_largest_prime
 
-    assert abs(student_marks['p18-1002']['english'] - 38.5) < epsilon
-    assert abs(student_marks['p18-1002']['programming fundaments'] - 38.5) < epsilon
-
-    assert abs(student_marks['p18-1003']['calculus'] - 36.9) < epsilon
-    assert abs(student_marks['p18-1003']['programming fundamentals'] - 38.5) < epsilon
+def test_get_prime_1():
+    assert get_largest_prime(7920) == 7919
 
 
-    # ensure no extra keys 
-    diff = list(set(student_marks['p18-1001'].keys()) - set(['english', 'calculus']))
-    assert len(diff) == 0, "Extra subjects found"
+def test_get_prime_2():
+    assert get_largest_prime(87) == 83
+
+def test_get_prime_3():
+    assert get_largest_prime(87.9) == 83
 
 
-
-def test_marks_s2():
-    # grade_boundaries = {'A': 80, 'B': 70, 'C': 60, 'D': 50}
-    student_data = [ 
-        {'roll_no': 'p18-1001', 'marks': {
-                'english': (1.4, 2.5, 15, 9.6, 33), 
-                'calculus': (2.4, 1.5, 12, 1.6, 21),
-            }, 'attendance': 88.4
-        }, 
-        {'roll_no': 'p18-1002', 'marks': {
-                'english': (2.4, 1.5, 12, 1.6, 21),
-                'programming fundaments': (2.4, 1.5, 12, 1.6, 21),
-            }, 'attendance': 79.4
-        }, 
-        {'roll_no': 'p18-1122', 'marks': {
-                'calculus': (2.4, 1.5, 12, 28, 21), 
-                'programming fundamentals': (2.4, 1.5, 12, 1.6, 21), 
-            }, 'attendance': 79.4
-        }, 
-    ]
+def test_get_prime_4():
+    assert get_largest_prime(0) == None
 
 
-    student_marks = get_student_marks(student_data)
-    assert abs(student_marks['p18-1001']['english'] - 61.5) < epsilon
-    assert abs(student_marks['p18-1001']['calculus'] - 38.5) < epsilon
-
-    assert abs(student_marks['p18-1002']['english'] - 38.5) < epsilon
-    assert abs(student_marks['p18-1002']['programming fundaments'] - 38.5) < epsilon
-
-    assert abs(student_marks['p18-1122']['calculus'] - 64.9) < epsilon
-    assert abs(student_marks['p18-1122']['programming fundamentals'] - 38.5) < epsilon
-
-    # ensure no extra keys 
-    diff = list(set(student_marks['p18-1122'].keys()) - set(['programming fundamentals', 'calculus']))
-    assert len(diff) == 0, "Extra subjects found"
+def test_get_prime_5():
+    assert get_largest_prime(7) == 7
 
 
+# output factors
 
-def test_grades_s1():
-    grade_boundaries = {'A': 80, 'B': 70, 'C': 60, 'D': 50}
-    assert get_grade(65, grade_boundaries) == 'C'
+def test_output_factors_1():
+    v, out = capture_output(output_factors)(10)
+    assert out == '\n'.join([str(x) for x in [1, 2, 5, 10]]) + "\n"
+
+def test_output_factors_2():
+    v, out = capture_output(output_factors)(99)
+    assert out == '\n'.join([str(x) for x in [1, 3, 9, 11, 33, 99]]) + "\n"
 
 
-def test_grades_s2():
-    grade_boundaries = {'A': 70, 'B': 60, 'C': 50, 'D': 40}
-    assert get_grade(65, grade_boundaries) == 'B'
+# output capturing decorator
+import io
+from contextlib import redirect_stdout
+import base64
+def capture_output(fn):
+    def wrapper(*args, **kwargs):
+        f = io.StringIO()
+        with redirect_stdout(f):
+            v = fn(*args, **kwargs)
+            out = f.getvalue()
+        return v, out
 
-def test_grades_s3():
-    grade_boundaries = {'A': 70, 'B': 60, 'C': 50, 'D': 40}
-    assert get_grade(5.7, grade_boundaries) == 'F'
+    return wrapper
 
-def test_grades_s4():
-    grade_boundaries = {'A': 90, 'B': 89, 'C': 88, 'D': 87}
-    assert get_grade(76, grade_boundaries) == 'F'
