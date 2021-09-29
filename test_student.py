@@ -1,57 +1,54 @@
 try:
-    from a05 import is_prime, get_largest_prime, output_factors
+    from a03 import sqrt
 except ImportError:
     pass
 
+try:
+    from a03 import good_enough
+except ImportError:
+    pass
 
+try:
+    from a03 import improve_guess
+except ImportError:
+    pass 
 
-def test_isprime_1():
-    for i in [5, 139, 631, 919]:
-        assert is_prime(i) == True
+epsilon = 1e-4  # precision needed
 
-def test_isprime_float():
-    assert is_prime(6.0) == False
-
-def test_isprime_float_2():
-    assert is_prime(6.09) == False
-
-
-## get_largest_prime
-
-def test_get_prime_1():
-    assert get_largest_prime(7920) == 7919
-
-
-def test_get_prime_2():
-    assert get_largest_prime(87) == 83
-
-def test_get_prime_3():
-    assert get_largest_prime(87.9) == 83
-
-
-def test_get_prime_4():
-    assert get_largest_prime(0) == None
-
-
-def test_get_prime_5():
-    assert get_largest_prime(7) == 7
-
-
-# output factors
-
-def test_output_factors_1():
-    v, out = capture_output(output_factors)(10)
-    assert out == '\n'.join([str(x) for x in [1, 2, 5, 10]]) + "\n"
-
-def test_output_factors_2():
-    v, out = capture_output(output_factors)(99)
-    assert out == '\n'.join([str(x) for x in [1, 3, 9, 11, 33, 99]]) + "\n"
-
-
-# output capturing decorator
 import io
 from contextlib import redirect_stdout
 import base64
+
+
+def test_sqrt_int_s0():
+    v = 36
+    assert abs(sqrt(v, 1.0) - 6) < epsilon
+
+def test_sqrt_int_s1():
+    v = 283748324.2394
+    assert abs(sqrt(v, 1.0) - 16844.83078) < epsilon
+
+def test_improve_guess_s1():
+    n = 36
+    g = 2.998
+    assert abs(improve_guess(n, g) - 7.50300) < epsilon
+
+def test_improve_guess_s2():
+    n = 36
+    g = 12122.083
+    assert abs(improve_guess(n, g) - 6061.04298) < epsilon
+
+def test_steps_s1(): 
+    v, out = capture_output(sqrt)(36, 1.0)
+    assert out.startswith("Took: 7 steps")
+
+
+def test_steps_s2(): 
+    v, out = capture_output(sqrt)(36, 6.0)
+    assert out.startswith(base64.b64decode(b'VG9vazogMSBzdGVwcw==').decode('ascii'))
+
+
+# output capturing decorator
 def capture_output(fn):
     def wrapper(*args, **kwargs):
         f = io.StringIO()
@@ -61,4 +58,3 @@ def capture_output(fn):
         return v, out
 
     return wrapper
-
