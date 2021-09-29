@@ -1,40 +1,46 @@
 ============================= test session starts =============================
 platform win32 -- Python 3.6.5, pytest-3.8.1, py-1.5.3, pluggy-0.7.1
-rootdir: C:\Users\Sabir Khosa\Downloads\pf, inifile:
+rootdir: C:\Users\Sabir Khosa\Downloads\door, inifile:
 plugins: timeout-1.3.2, remotedata-0.2.1, openfiles-0.3.0, doctestplus-0.1.3, arraydiff-0.2
 timeout: 3.0s
 timeout method: thread
 timeout func_only: False
-collected 0 items / 2 errors
+collected 4 items
 
-=================================== ERRORS ====================================
-______________________ ERROR collecting test_student.py _______________________
-..\..\Anaconda3\lib\site-packages\_pytest\python.py:482: in _importtestmodule
-    mod = self.fspath.pyimport(ensuresyspath=importmode)
-..\..\Anaconda3\lib\site-packages\py\_path\local.py:668: in pyimport
-    __import__(modname)
-<frozen importlib._bootstrap>:971: in _find_and_load
-    ???
-<frozen importlib._bootstrap>:955: in _find_and_load_unlocked
-    ???
-<frozen importlib._bootstrap>:656: in _load_unlocked
-    ???
-<frozen importlib._bootstrap>:626: in _load_backward_compatible
-    ???
-..\..\Anaconda3\lib\site-packages\_pytest\assertion\rewrite.py:290: in load_module
-    six.exec_(co, mod.__dict__)
-test_student.py:2: in <module>
-    from a07 import read_data
-E     File "C:\Users\Sabir Khosa\Downloads\pf\a07.py", line 28
-E       return ist1
-E                 ^
-E   SyntaxError: 'return' outside function
-______________ ERROR collecting a05-updated/a05/test_student.py _______________
-import file mismatch:
-imported module 'test_student' has this __file__ attribute:
-  C:\Users\Sabir Khosa\Downloads\Compressed\a05-updated\a05\test_student.py
-which is not the same as the test file we want to collect:
-  C:\Users\Sabir Khosa\Downloads\pf\a05-updated\a05\test_student.py
-HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
-!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!
-=========================== 2 error in 0.82 seconds ===========================
+test_student.py ..FF                                                     [100%]
+
+================================== FAILURES ===================================
+____________________________ test_missingEntries3 _____________________________
+
+    def test_missingEntries3():
+        data=[
+    	'18P-0006,Ahmed Khan,1,8',
+    	'18P-0130,Ali Hassan,2,2,4',
+    	'18P-6061,Ikram Durrani,3,2,4',
+    	'18P-6089,Muhammad,14',
+    	'18P-6154,Syed Shahid Khaqani,1,2,3',
+    	'18P-6064,Hamza Arif,6.5,7,2.5',
+    	'18P-6065,Muhammad Ali,2,3.2,4'
+    	]
+    
+        for i in range(len(data)):
+>           writeMissingEntries(data[i])
+
+test_student.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = '18P-0006,Ahmed Khan,1,8'
+
+    def  writeMissingEntries(x):
+>       with open(x,"r") as f:
+E       FileNotFoundError: [Errno 2] No such file or directory: '18P-0006,Ahmed Khan,1,8'
+
+a05b.py:10: FileNotFoundError
+____________________________ test_missingEntries4 _____________________________
+
+    def test_missingEntries4():
+>       os.remove('logfile.log')
+E       FileNotFoundError: [WinError 2] The system cannot find the file specified: 'logfile.log'
+
+test_student.py:46: FileNotFoundError
+===================== 2 failed, 2 passed in 0.52 seconds ======================

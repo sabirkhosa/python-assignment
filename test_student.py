@@ -1,60 +1,63 @@
+
+
+import os
+
 try:
-    from a03 import sqrt
+    from a05b import writeMissingEntries
+
 except ImportError:
     pass
 
-try:
-    from a03 import good_enough
-except ImportError:
-    pass
 
-try:
-    from a03 import improve_guess
-except ImportError:
-    pass 
+def test_missingEntries1():
+    try:
+        os.remove('logfile.log')
+        writeMissingEntries('18P-6089,Muhammad,1,4')
+        assert(os.path.isfile('logfile.log')==True)
+    except:
+        pass
 
-epsilon = 1e-4  # precision needed
+def test_missingEntries2():
+    try:
+        os.remove('logfile.log')
+        writeMissingEntries('18P-6089,Muhammad,1,2,4')
+        assert(os.path.isfile('logfile.log')==False)
+    except:
+        pass
 
-import io
-from contextlib import redirect_stdout
-import base64
+def test_missingEntries3():
+    data=[
+	'18P-0006,Ahmed Khan,1,8',
+	'18P-0130,Ali Hassan,2,2,4',
+	'18P-6061,Ikram Durrani,3,2,4',
+	'18P-6089,Muhammad,14',
+	'18P-6154,Syed Shahid Khaqani,1,2,3',
+	'18P-6064,Hamza Arif,6.5,7,2.5',
+	'18P-6065,Muhammad Ali,2,3.2,4'  
+	]
+
+    for i in range(len(data)):
+        writeMissingEntries(data[i]) 
+    with open('logfile.log','r') as flog:
+        assert(flog.readline()=='[18P-0006,Ahmed Khan,1,8]\n')
+        assert(flog.readline()=='[18P-6089,Muhammad,14]\n')
+
+def test_missingEntries4():
+    os.remove('logfile.log')
+    data=[
+	'18P-6089,Muhammad,14',
+	'18P-0006,Ahmed Khan,1,8',
+	'18P-0130,Ali Hassan,2,2,4',
+	'18P-6061,Ikram Durrani,3,2,4',
+	'18P-6154,Syed Shahid Khaqani,1,2,3',
+	'18P-6064,Hamza Arif,6.5,7,2.5',
+	'18P-6065,Muhammad Ali,2,3.2,4'  
+	]
+
+    for i in range(len(data)):
+        writeMissingEntries(data[i]) 
+    with open('logfile.log','r') as flog:
+        assert(flog.readline()=='[18P-6089,Muhammad,14]\n')
+        assert(flog.readline()=='[18P-0006,Ahmed Khan,1,8]\n')
 
 
-def test_sqrt_int_s0():
-    v = 36
-    assert abs(sqrt(v, 1.0) - 6) < epsilon
-
-def test_sqrt_int_s1():
-    v = 283748324.2394
-    assert abs(sqrt(v, 1.0) - 16844.83078) < epsilon
-
-def test_improve_guess_s1():
-    n = 36
-    g = 2.998
-    assert abs(improve_guess(n, g) - 7.50300) < epsilon
-
-def test_improve_guess_s2():
-    n = 36
-    g = 12122.083
-    assert abs(improve_guess(n, g) - 6061.04298) < epsilon
-
-def test_steps_s1(): 
-    v, out = capture_output(sqrt)(36, 1.0)
-    assert out.startswith("Took: 7 steps")
-
-
-def test_steps_s2(): 
-    v, out = capture_output(sqrt)(36, 6.0)
-    assert out.startswith(base64.b64decode(b'VG9vazogMSBzdGVwcw==').decode('ascii'))
-
-
-# output capturing decorator
-def capture_output(fn):
-    def wrapper(*args, **kwargs):
-        f = io.StringIO()
-        with redirect_stdout(f):
-            v = fn(*args, **kwargs)
-            out = f.getvalue()
-        return v, out
-
-    return wrapper
