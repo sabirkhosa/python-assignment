@@ -1,2 +1,1 @@
-# assignment
-everything is god
+# this repo contain python assignment lectures task
